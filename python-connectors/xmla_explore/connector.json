@@ -1,0 +1,94 @@
+{
+    "meta" : {
+        "label": "Custom dataset xmla_explore",
+        "description": "",
+        "icon": "icon-th"
+    },
+    "readable": true,
+    "writable": false,
+    "kind": "PYTHON",
+    "paramsPythonSetup": "browse_xmla.py",
+    "params": [
+        {
+            "name": "authentication_type",
+            "label": "Authentication type",
+            "type": "SELECT",
+            "selectChoices": [
+                { "value": "None", "label": "None"},
+                { "value": "basic_auth_service_account", "label": "Service accounts"},
+                { "value": "basic_auth_personal", "label": "Personal account"},
+                { "value": "oauth_personal", "label": "SSO"}
+            ],
+            "defaultValue": "None"
+        },
+        {
+            "name": "basic_auth_service_account_credentials",
+            "label": "User preset",
+            "type": "PRESET",
+            "parameterSetId": "basic-auth-service-account",
+            "visibilityCondition": "model.authentication_type=='basic_auth_service_account'"
+        },
+        {
+            "name": "basic_auth_personal_credentials",
+            "label": "User preset",
+            "type": "PRESET",
+            "parameterSetId": "basic-auth-personal",
+            "visibilityCondition": "model.authentication_type=='basic_auth_personal'"
+        },
+        {
+            "name": "oauth_personal_credentials",
+            "label": "User preset",
+            "type": "PRESET",
+            "parameterSetId": "oauth-personal",
+            "visibilityCondition": "model.authentication_type=='oauth_personal'"
+        },
+        {
+            "name": "select_catalog",
+            "label": "Catalogs",
+            "type": "SELECT",
+            "visibilityCondition": true,
+            "getChoicesFromPython": true,
+            "triggerParameters": ["basic_auth_service_account_credentials", "basic_auth_personal_credentials", "oauth_personal_credentials"]
+        },
+        {
+            "name": "select_schema_cube",
+            "label": "Cubes",
+            "type": "SELECT",
+            "visibilityCondition": "model.select_catalog.length>0",
+            "getChoicesFromPython": true,
+            "triggerParameters": ["select_catalog"]
+        },
+        {
+            "name": "select_dimensions",
+            "label": "Dimensions",
+            "type": "MULTISELECT",
+            "visibilityCondition": "(model.select_catalog.length > 0) && (model.select_schema_cube.length > 0)",
+            "getChoicesFromPython": true,
+            "triggerParameters": ["select_schema_cube"]
+        },
+        {
+            "name": "select_properties",
+            "label": "Properties",
+            "type": "MULTISELECT",
+            "visibilityCondition": "(model.select_dimensions.length > 0)",
+            "getChoicesFromPython": true,
+            "triggerParameters": ["select_dimensions"]
+        },
+        {
+            "name": "select_measures",
+            "label": "Measures",
+            "type": "MULTISELECT",
+            "visibilityCondition": "(model.select_catalog.length > 0) && (model.select_schema_cube.length > 0)",
+            "getChoicesFromPython": true,
+            "triggerParameters": ["select_schema_cube"]
+        },
+        {
+            "name": "select_hierarchy",
+            "label": "Hierarchy",
+            "type": "MULTISELECT",
+            "visibilityCondition": false,
+            "getChoicesFromPython": true,
+            "triggerParameters": ["select_schema_cube"]
+        }
+    ]
+}

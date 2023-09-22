@@ -1,0 +1,64 @@
+{
+    "meta" : {
+        "label": "SSO apps",
+        "description": "⚠️ Requires DSS 12.4 or above",
+        "icon": "icon-puzzle-piece"
+    },
+    "defaultDefinableInline": false,
+    "defaultDefinableAtProjectLevel": false,
+    "pluginParams": [
+
+    ],
+    "params": [
+        {
+            "name": "endpoint",
+            "label": "URL to XMLA endpoint",
+            "description": "http(s)://my.server:1234/xmla",
+            "type": "STRING"
+        },
+        {
+            "name": "xmla_oauth",
+            "type": "CREDENTIAL_REQUEST",
+            "label": "XMLA Single Sign On",
+            "credentialRequestSettings": {
+                "type": "OAUTH2",
+                "authorizationEndpoint": "https://to.be.replaced",
+                "tokenEndpoint": "https://to.be.replaced",
+                "scope": "Replace.Me"
+            },
+            "mandatory": true
+        },
+        {
+            "name": "authorizationEndpoint",
+            "label": "Authorization endpoint",
+            "type": "STRING",
+            "description": "See documentation",
+            "mandatory": true
+        },
+        {
+            "name": "server_type",
+            "label": "Server type",
+            "type": "SELECT",
+            "selectChoices": [
+                { "value": "mondrian", "label": "Mondrian"},
+                { "value": "sap-bw", "label": "SAP-BW"},
+                { "value": "power-bi", "label": "Power BI"}
+            ],
+            "defaultValue": "mondrian"
+        },
+        {
+            "name": "tokenEndpoint",
+            "label": "Token endpoint",
+            "type": "STRING",
+            "description": "See documentation",
+            "mandatory": true
+        },
+        {
+            "name": "scope",
+            "label": "Scopes",
+            "type": "STRING",
+            "description": "See documentation",
+            "mandatory": true
+        }
+    ]
+}

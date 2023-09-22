@@ -1,0 +1,52 @@
+{
+    "meta" : {
+        "label": "Service accounts",
+        "description": "",
+        "icon": "icon-puzzle-piece"
+    },
+    "defaultDefinableInline": true,
+    "defaultDefinableAtProjectLevel": true,
+    "pluginParams": [
+    ],
+    "params": [
+        {
+            "name": "auth_type",
+            "label": "Authentication type",
+            "type": "SELECT",
+            "selectChoices": [
+                { "value": "basic", "label": "Basic"},
+                { "value": "bearer-token", "label": "Bearer token"},
+                { "value": "ntlm", "label": "NTLM"},
+                { "value": "kerberos", "label": "Kerberos"}
+            ],
+            "defaultValue": "basic"
+        },
+        {
+            "name": "username",
+            "label": "Username",
+            "type": "STRING"
+        },
+        {
+            "name": "password",
+            "label": "Password",
+            "type": "PASSWORD"
+        },
+        {
+            "name": "endpoint",
+            "label": "URL to XMLA endpoint",
+            "description": "http(s)://my.server:1234/xmla",
+            "type": "STRING"
+        },
+        {
+            "name": "server_type",
+            "label": "Server type",
+            "type": "SELECT",
+            "selectChoices": [
+                { "value": "mondrian", "label": "Mondrian"},
+                { "value": "sap-bw", "label": "SAP-BW"},
+                { "value": "power-bi", "label": "Power BI"}
+            ],
+            "defaultValue": "mondrian"
+        }
+    ]
+}
