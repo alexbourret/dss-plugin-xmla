@@ -55,11 +55,6 @@ class XMLAClient(object):
     def execute(self, mdx_query):
         data = EXECUTE_REQUESTS[self.version].format(mdx_query)
         json_response = self.post_xmla(data)
-        return json_response
-    
-    def execute_cube(self, mdx_query):
-        data = EXECUTE_REQUESTS[self.version].format(mdx_query)
-        json_response = self.post_xmla(data)
         cube = Cube(json_response, version = self.version)
         return cube
 

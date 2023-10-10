@@ -1,10 +1,4 @@
-# This file is the actual code for the custom Python dataset xmla_explore
-
-# import the base class for the custom dataset
-from six.moves import xrange
 from dataiku.connector import Connector
-import requests
-import xmltodict
 from xmla_common import extract_path, RecordsLimit, get_credentials
 from xmla_client import XMLAClient, extract_members
 from xmla_constants import XMLAConstants
@@ -14,25 +8,10 @@ from safe_logger import SafeLogger
 logger = SafeLogger("xmla plugin", forbidden_keys=["password", "bearer_token"])
 
 
-"""
-A custom Python dataset is a subclass of Connector.
-
-The parameters it expects and some flags to control its handling by DSS are
-specified in the connector.json file.
-
-Note: the name of the class itself is not relevant.
-"""
-class MyConnector(Connector):
+class XMLAConnector(Connector):
 
     def __init__(self, config, plugin_config):
-        """
-        The configuration parameters set up by the user in the settings tab of the
-        dataset are passed as a json object 'config' to the constructor.
-        The static configuration parameters set up by the developer in the optional
-        file settings.json at the root of the plugin directory are passed as a json
-        object 'plugin_config' to the constructor
-        """
-        Connector.__init__(self, config, plugin_config)  # pass the parameters to the base class
+        Connector.__init__(self, config, plugin_config)
         logger.info("Starting XMLA plugin v{} with config={}".format(
             XMLAConstants.PLUGIN_VERSION,
             logger.filter_secrets(config)
@@ -76,18 +55,10 @@ class MyConnector(Connector):
 
     def generate_rows(self, dataset_schema=None, dataset_partitioning=None,
                       partition_id=None, records_limit=-1):
-        """
-        The main reading method.
-
-        Returns a generator over the rows of the dataset (or partition)
-        Each yielded row must be a dictionary, indexed by column name.
-
-        The dataset schema and partitioning are given for information purpose.
-        """
         mdx_query = self.client.build_mdx_query(self.cube, self.dimensions, self.measures, self.properties)
         logger.info("mdx_query={}".format(mdx_query))
 
-        cube = self.client.execute_cube(mdx_query)
+        cube = self.client.execute(mdx_query)
         error_message = cube.get_error_message()
 
         if error_message:
@@ -109,13 +80,13 @@ class MyConnector(Connector):
         length_vertical_axis = len(vertical_axis)
         counter = 0
         limit = RecordsLimit(records_limit=records_limit)
-        for row_index in xrange(0, length_vertical_axis):
+        for row_index in range(0, length_vertical_axis):
             row = {}
             left_column_counter = 0
             for left_column_name in left_columns_names:
                 row[left_column_name] = rows_names[row_index][left_column_counter]
                 left_column_counter += 1
-            for column_index in xrange(0, length_horizontal_axis):
+            for column_index in range(0, length_horizontal_axis):
                 row["{}".format(columns_names[column_index])] = cells[counter].get("Value", {}).get("#text")
                 counter +=1
             yield row
